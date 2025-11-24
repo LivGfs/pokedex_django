@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework'
-    'api'
+    'rest_framework',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -78,8 +78,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'pokedex_db',       # O nome que você criou
-        'USER': 'postgres_user',    # Seu usuário do Postgres
-        'PASSWORD': 'sua_senha_segura',
+        'USER': 'postgres',    # Seu usuário do Postgres
+        'PASSWORD': 'LiviaG!123',
         'HOST': 'localhost',        # Ou o IP do seu servidor de DB
         'PORT': '5432',             # Porta padrão do Postgres
     }
