@@ -1,6 +1,8 @@
 # api/models.py
 from django.db import models
 
+import requests # Importe o requests no início do arquivo
+
 # Model base para incluir 'criado_em' e 'atualizado_em'
 class TimeStampedModel(models.Model):
     """
@@ -65,3 +67,75 @@ class PokemonsDoTreinador(models.Model):
 
     def __str__(self):
         return f"{self.treinador.nome} possui {self.pokemon.nome}"
+    
+
+
+
+
+
+# ... (Model TimeStampedModel e Treinador) ...
+
+# Crie uma exceção customizada (melhor que travar o app)
+class PokeAPIError(Exception):
+    pass
+
+# 2. Modelo Pokémon (Atualizado)
+class Pokemon(TimeStampedModel):
+    # ... (Campos id, nome, foto, altura, peso) ...
+
+    def __str__(self):
+        return self.nome
+
+    def _buscar_dados_pokeapi(self):
+        """
+        Método privado para buscar dados na PokeAPI.
+        """
+        # Se já temos os dados (ex: em uma atualização), não busca de novo
+        if self.foto and self.altura and self.peso:
+            return
+
+        try:
+            # URL da PokeAPI (sempre minúsculas)
+            url = f"https://pokeapi.co/api/v2/pokemon/{self.nome.lower()}"
+            response = requests.get(url)
+
+            # Se o Pokémon não for encontrado (404)
+            if response.status_code == 404:
+                raise PokeAPIError(f"Pokémon '{self.nome}' não encontrado na PokeAPI.")
+
+            # Se outro erro ocorrer
+            response.raise_for_status() # Levanta exceção para erros HTTP (4xx, 5xx)
+
+            data = response.json()
+
+            # Atualiza os campos do objeto (self)
+            self.altura = data.get('height')
+            self.peso = data.get('weight')
+
+            # Pega a foto oficial (ou a 'front_default' se não houver)
+            sprites = data.get('sprites', {})
+            self.foto = sprites.get('other', {}).get('official-artwork', {}).get('front_default')
+            if not self.foto:
+                self.foto = sprites.get('front_default')
+
+        except requests.RequestException as e:
+            # Trata erros de conexão, timeout, etc.
+            raise PokeAPIError(f"Erro ao acessar a PokeAPI: {e}")
+
+    def save(self, *args, **kwargs):
+        """
+        Sobrescreve o método save para buscar dados da PokeAPI
+        antes de salvar no banco.
+        """
+        # 'self.pk' (primary key) só existe se o objeto já está no banco
+        # 'force_insert' é usado para garantir que a busca ocorra na criação
+        is_new = self.pk is None or kwargs.get('force_insert', False)
+
+        if is_new:
+            # (A exceção PokeAPIError será propagada se ocorrer)
+            self._buscar_dados_pokeapi() 
+
+        # Chama o método save original
+        super().save(*args, **kwargs)
+
+# ... (Model PokemonsDoTreinador) ...
