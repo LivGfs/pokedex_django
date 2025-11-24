@@ -76,11 +76,14 @@ WSGI_APPLICATION = 'pokedex_api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'pokedex_db',       # O nome que você criou
+        'USER': 'postgres_user',    # Seu usuário do Postgres
+        'PASSWORD': 'sua_senha_segura',
+        'HOST': 'localhost',        # Ou o IP do seu servidor de DB
+        'PORT': '5432',             # Porta padrão do Postgres
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
