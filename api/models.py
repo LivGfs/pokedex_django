@@ -1,12 +1,9 @@
-# api/models.py
 from django.db import models
-import requests  # Importação obrigatória para consumir a PokeAPI
+import requests  
 
-# 1. Modelo Base (Abstrato)
+# Modelo Base 
 class TimeStampedModel(models.Model):
-    """
-    Modelo base para adicionar data de criação e atualização em todas as tabelas.
-    """
+    
     criado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
 
@@ -15,7 +12,6 @@ class TimeStampedModel(models.Model):
 
 # 2. Exceção Customizada
 class PokeAPIError(Exception):
-    """Exceção para erros relacionados à busca na PokeAPI."""
     pass
 
 # 3. Modelo Treinador
@@ -34,7 +30,7 @@ class Treinador(TimeStampedModel):
 
 # 4. Modelo Pokémon
 class Pokemon(TimeStampedModel):
-    # Atenção: Este modelo NÃO é abstrato. Ele cria a tabela no banco.
+    # observação adicional: este modelo NÃO é abstrato. Ele cria a tabela no banco.
     nome = models.CharField(max_length=100, unique=True)
     foto = models.URLField(blank=True, null=True)
     altura = models.PositiveIntegerField(blank=True, null=True)
@@ -44,9 +40,6 @@ class Pokemon(TimeStampedModel):
         return self.nome
 
     def _buscar_dados_pokeapi(self):
-        """
-        Método privado que conecta na API externa para preencher os dados.
-        """
         # Se os dados já existem, não faz a requisição novamente
         if self.foto and self.altura and self.peso:
             return
@@ -75,9 +68,6 @@ class Pokemon(TimeStampedModel):
             raise PokeAPIError(f"Erro ao acessar a PokeAPI: {e}")
 
     def save(self, *args, **kwargs):
-        """
-        Intercepta o salvamento para buscar dados antes de gravar no banco.
-        """
         is_new = self.pk is None or kwargs.get('force_insert', False)
         
         if is_new:
