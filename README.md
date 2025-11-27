@@ -3,9 +3,9 @@ Gerenciamento de Treinadores e Pokémons
 
 # Pokedex API - Desafio Django
 
-Esta é uma API RESTful para gerenciamento de Treinadores e Pokémons, desenvolvida como parte de um desafio técnico. O sistema permite criar treinadores, capturar pokémons (integrado com a PokeAPI externa) e realizar batalhas baseadas no peso dos personagens.
+Esta é uma API RESTful para gerenciamento de Treinadores e Pokémons.. O sistema permite criar treinadores, capturar pokémons (PokeAPI externa) e realizar batalhas baseadas em características dos personagens.
 
-## 🚀 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 * **Linguagem:** Python 3.11+
 * **Framework:** Django 5
@@ -13,14 +13,14 @@ Esta é uma API RESTful para gerenciamento de Treinadores e Pokémons, desenvolv
 * **Banco de Dados:** PostgreSQL
 * **Integração:** Requests (para consumo da PokeAPI)
 
-## ⚙️ Pré-requisitos
+## Pré-requisitos
 
 Antes de começar, você precisa ter instalado em sua máquina:
 * Python 3.11 ou superior
 * PostgreSQL
 * Git
 
-## 🔧 Instalação e Configuração
+## Instalação e Configuração
 
 Siga os passos abaixo para rodar o projeto localmente:
 
