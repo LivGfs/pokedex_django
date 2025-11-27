@@ -10,11 +10,11 @@ class TimeStampedModel(models.Model):
     class Meta:
         abstract = True  # Define que este modelo não cria tabela no banco
 
-# 2. Exceção Customizada
+# Exceção Customizada
 class PokeAPIError(Exception):
     pass
 
-# 3. Modelo Treinador
+# Modelo Treinador
 class Treinador(TimeStampedModel):
     nome = models.CharField(max_length=100)
     idade = models.PositiveIntegerField()
@@ -28,7 +28,7 @@ class Treinador(TimeStampedModel):
     def __str__(self):
         return self.nome
 
-# 4. Modelo Pokémon
+# Modelo Pokémon
 class Pokemon(TimeStampedModel):
     # observação adicional: este modelo NÃO é abstrato. Ele cria a tabela no banco.
     nome = models.CharField(max_length=100, unique=True)
@@ -75,7 +75,7 @@ class Pokemon(TimeStampedModel):
             
         super().save(*args, **kwargs)
 
-# 5. Modelo Intermediário (Relação Treinador <-> Pokémon)
+# Modelo Intermediário (Relação Treinador <-> Pokémon)
 class PokemonsDoTreinador(models.Model):
     treinador = models.ForeignKey(Treinador, on_delete=models.CASCADE)
     pokemon = models.ForeignKey(Pokemon, on_delete=models.CASCADE)
